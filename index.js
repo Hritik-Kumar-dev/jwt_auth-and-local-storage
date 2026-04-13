@@ -25,8 +25,11 @@ app.post("/signup", function (req, res) {
 //     message:"you have signed up  "
 //   })
   
-  const token = res.json({
-    token :token 
+  const token =  jwt.sign({
+   username: username 
+},"hritik123" )
+res.json({
+    token : token 
 })
 });
 
@@ -34,7 +37,7 @@ app.post("/signup", function (req, res) {
 app.post("/signin",function(req,res){
      const username = req.body.username;
   const password = req.body.password;
-  const userexist = users.find(user=>user.username===username && user.password===password ); 
+  const userexist = users.find((user)=>user.username===username && user.password===password ); 
 
   if (!userexist) {
     res.status(403).json({
@@ -50,8 +53,6 @@ res.json({
     token : token 
 })
 })
-
-
 
 app.post("/notes", function (req, res) {
 

@@ -29,7 +29,7 @@
         await axios.post("http://localhost:3000/notes", {
           note: document.getElementById("userNotes").value,
         },{
-          Headers:{
+          headers:{
             token : localStorage.getItem("token")
           }
         });
