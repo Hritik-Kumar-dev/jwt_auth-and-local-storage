@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>notes taking</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+  <style>
+    .container {
+      padding: 15px;
+      display: flex;
+      justify-content: space-around;
+    }
+  </style>
+  <body>
+    <div class="container">
+      <div class="left">
+        <div id="notes">loading notes ...</div>
+      </div>
+      <div class="right">
+        <input type="text" id="userNotes" placeholder="enter notes" />
+        <button onclick="addTodo()">create notes</button>
+      </div>
+    </div>
+
+    <script>
+      async function addTodo() {
+        await axios.post("http://localhost:3000/notes", {
+          note: document.getElementById("userNotes").value,
+        },{
+          Headers:{
+            token : localStorage.getItem("token")
+          }
+        });
+
+        // now sending notes  to the frontend
+        const newnotes = document.createElement("div");
+        newnotes.innerHTML = document.getElementById("userNotes").value;
+        document.getElementById("notes").appendChild(newnotes);
+
+        document.getElementById("userNotes").value ="";
+      }
+
+      async function getTodos() {
+        // alert("this is alert !! ")
+        //  const response = await fetch("http://localhost:3000/notes")
+        //  const json = await response.json() ;
+        // console.log(json.notes);
+
+        const response = await axios.get("http://localhost:3000/notes",{
+          headers : {
+            token : localStorage.getItem("token")
+          }
+        });
+        console.log(response.data.notes);
+        const notes = response.data.notes;
+        document.getElementById("notes").innerHTML = "";
+
+        for (let i = 0; i < notes.length; i++) {
+          const notenotes = document.createElement("div");
+          notenotes.innerHTML = notes[i].note;
+          document.getElementById("notes").appendChild(notenotes);
+        }
+      }
+      getTodos();
+    </script>
+  </body>
+</html>
