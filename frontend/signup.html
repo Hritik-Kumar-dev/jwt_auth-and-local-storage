@@ -22,10 +22,27 @@
     </script>
 
 </head>
+<style>
+    body{
+        padding: 40px;
+    }
+    .container{
+        display: flex;
+        flex-direction: column;
+        width: fit-content;
+        gap: 5px;
+        
+    }
+    button{
+        background-color: rgb(113, 176, 176);
+    }
+</style>
 <body>
-    
-<input id="username" type="text" placeholder="username">username 
-<input id="password" type="text" placeholder="password">password 
-<button onclick="signup()">signup</button>
+    <div class="container">
+<h2>sign up </h2>
+        <input id="username" type="text" placeholder="username">
+        <input id="password" type="text" placeholder="password">
+        <button onclick="signup()">signup</button>
+    </div>
 </body>
 </html>

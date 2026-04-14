@@ -19,12 +19,28 @@
 
         }
     </script>
-
 </head>
+<style>
+    body{
+        padding: 40px;
+    }
+    .container{
+        display: flex;
+        flex-direction: column;
+        width: fit-content;
+        gap: 5px;
+        
+    }
+    button{
+        background-color: rgb(68, 239, 134);
+    }
+</style>
 <body>
-    
-<input id="username" type="text" placeholder="username">username 
-<input id="password" type="text" placeholder="password">password 
-<button onclick="signin()">signin</button>
+    <div class="container">
+<h2>sign in</h2>
+        <input id="username" type="text" placeholder="username">
+        <input id="password" type="text" placeholder="password">
+        <button onclick="signin()">signin</button>
+    </div>
 </body>
 </html>
