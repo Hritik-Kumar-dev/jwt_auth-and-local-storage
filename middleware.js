@@ -20,7 +20,7 @@ function authmiddleware(req,res,next) {
    }
 
 
-   res.username = username ; 
+   req.username = username ; 
    next();
 }
 module.exports= {authmiddleware}
