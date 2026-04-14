@@ -1,11 +1,14 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const  {authmiddleware}=require("./middleware.js")
 const app = express();
 app.use(express.json());
 const notes = [];
-const users = [{
-    username:"hritik",
-    password: "123456"}
+const users = [
+  {
+    username: "hritik",
+    password: "123456",
+  },
 ];
 
 app.post("/signup", function (req, res) {
@@ -21,62 +24,69 @@ app.post("/signup", function (req, res) {
     username: username,
     password: password,
   });
-//   res.json({
-//     message:"you have signed up  "
-//   })
-  
-  const token =  jwt.sign({
-   username: username 
-},"hritik123" )
-res.json({
-    token : token 
-})
+  //   res.json({
+  //     message:"you have signed up  "
+  //   })
+
+  const token = jwt.sign(
+    {
+      username: username,
+    },
+    "hritik123",
+  );
+  res.json({
+    token: token,
+  });
 });
 
-
-app.post("/signin",function(req,res){
-     const username = req.body.username;
+app.post("/signin", function (req, res) {
+  const username = req.body.username;
   const password = req.body.password;
-  const userexist = users.find((user)=>user.username===username && user.password===password ); 
+  const userexist = users.find(
+    (user) => user.username === username && user.password === password,
+  );
 
   if (!userexist) {
     res.status(403).json({
-        message : "user dont exist  "
-    })
-    return ; 
-}
-// json web token  
-const token =  jwt.sign({
-   username: username 
-},"hritik123" )
-res.json({
-    token : token 
-})
-})
+      message: "user dont exist  ",
+    });
+    return;
+  }
+  // json web token
+  const token = jwt.sign(
+    {
+      username: username,
+    },
+    "hritik123",
+  );
+  res.json({
+    token: token,
+  });
+});
 
-app.post("/notes", function (req, res) {
+app.post("/notes",authmiddleware, function (req, res) {
+//   const token = req.headers.token;
+//   if (!token) {
+//     res.status(403).send({
+//       message: "you are not logged in ",
+//     });
+//     return;
+//   }
 
-     const token = req.headers.token 
-     if (!token ) {
-        res.status(403).send({
-            message:"you are not logged in "
-        });
-        return ; 
-     }
+//   const decoded = jwt.verify(token, "hritik123");
+//   const username = decoded.username;
+//   if (!username) {
+//     res.status(403).json({
+//       message: " malformed token ",
+//     });
+//     return;
+//   }
 
-const decoded = jwt.verify(token ,"hritik123")
-const username=decoded.username 
-if (!username) {
-    res.status(403).json({
-        message: " malformed token "
-    })
-    return ;
-}
-
+const username = req.username ; 
   const note = req.body.note;
   notes.push({
-    note : note ,
-    username:username
+    note: note,
+    username: username,
   });
 
   res.json({
@@ -84,29 +94,29 @@ if (!username) {
   });
 });
 
-app.get("/notes", function (req, res) {
-       const token = req.headers.token 
-     if (!token ) {
-        res.status(403).send({
-            message:"you are not logged in "
-        });
-        return ; 
-     }
+app.get("/notes",authmiddleware, function (req, res) {
+//   const token = req.headers.token;
+//   if (!token) {
+//     res.status(403).send({
+//       message: "you are not logged in ",
+//     });
+//     return;
+//   }
 
-const decoded = jwt.verify(token ,"hritik123")
-const username=decoded.username 
-if (!username) {
-    res.status(403).json({
-        message: " malformed token "
-    })
-    return ;
-}
+//   const decoded = jwt.verify(token, "hritik123");
+//   const username = decoded.username;
+//   if (!username) {
+//     res.status(403).json({
+//       message: " malformed token ",
+//     });
+//     return;
+//   }
+const username=req.username ;
 
-
-const usernotes = notes.filter(note =>note.username==username )
+  const usernotes = notes.filter((note) => note.username == username);
 
   res.json({
-    notes:usernotes 
+    notes: usernotes,
   });
 });
 app.get("/", function (req, res) {
